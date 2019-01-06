@@ -1,7 +1,6 @@
 from flask import Flask,render_template,flash,redirect,url_for,session,logging,request
 from wtforms import Form,StringField,TextAreaField,PasswordField,validators
 from passlib.hash import sha256_crypt
-from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -9,15 +8,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///D:\\VSCodeFiles\\TodoApp\\tod
 db = SQLAlchemy(app)
 app.secret_key = "todo_secret"
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if "logged_in" in session:
-            return f(*args, **kwargs)
-        else:
-            flash("Bu sayfayı görüntülemek için lütfen giriş yapın!","danger")
-            return redirect(url_for("login"))
-    return decorated_function
 
 @app.route("/login",methods =["GET","POST"])
 def login():
